@@ -27,6 +27,7 @@
 #include "messages-management.pb.h"
 #include "messages-nem.pb.h"
 #include "messages-stellar.pb.h"
+#include "messages-tezos.pb.h"
 
 // message functions
 
@@ -100,6 +101,11 @@ void fsm_msgStellarAllowTrustOp(StellarAllowTrustOp *msg);
 void fsm_msgStellarAccountMergeOp(StellarAccountMergeOp *msg);
 void fsm_msgStellarManageDataOp(StellarManageDataOp *msg);
 void fsm_msgStellarBumpSequenceOp(StellarBumpSequenceOp *msg);
+
+// Tezos
+void fsm_msgTezosGetAddress(TezosGetAddress *msg);
+void fsm_msgTezosGetPublicKey(TezosGetPublicKey *msg);
+void fsm_msgTezosSignTx(TezosSignTx *msg);
 
 // debug message functions
 #if DEBUG_LINK

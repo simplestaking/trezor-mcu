@@ -1,0 +1,20 @@
+TezosGetAddress.address_n                     max_count:8
+TezosAddress.address                          max_size:37
+
+TezosGetPublicKey.address_n                   max_count:8
+TezosPublicKey.public_key                     max_size:56
+
+TezosSignTx.address_n                         max_count:8
+TezosSignTx.branch                            max_size:32
+TezosSignTx.TezosContractID.hash              max_size:21
+
+TezosSignTx.TezosTransactionOp.parameters     max_size:100
+TezosSignTx.TezosOriginationOp.manager_pubkey max_size:21
+TezosSignTx.TezosOriginationOp.delegate       max_size:21
+TezosSignTx.TezosOriginationOp.script         max_size:100
+TezosSignTx.TezosDelegationOp.delegate        max_size:21
+TezosSignTx.TezosRevealOp.public_key          max_size:33
+
+TezosSignedTx.signature                       max_size:100
+TezosSignedTx.sig_op_contents                 max_size:1024
+TezosSignedTx.operation_hash                  max_size:52

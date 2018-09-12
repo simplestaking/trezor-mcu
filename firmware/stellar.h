@@ -23,6 +23,7 @@
 #include <stdbool.h>
 #include "bip32.h"
 #include "crypto.h"
+#include "curves.h"
 #include "messages.pb.h"
 #include "fsm.h"
 #include "base32.h"

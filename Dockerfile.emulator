@@ -15,3 +15,5 @@ RUN unzip "protoc-${PROTOBUF_VERSION}-linux-x86_64.zip" -d /usr
 RUN pip3 install "protobuf==${PROTOBUF_VERSION}" ecdsa
 
 RUN ln -s python3 /usr/bin/python
+
+ADD . /trezor-mcu
