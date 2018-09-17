@@ -104,7 +104,7 @@ bool tezos_sign_tx(HDNode *node, TezosSignTx *msg, TezosSignedTx *resp)
                 return false;
 	}
     } else {
-        fsm_sendFailure(Failure_FailureType_Failure_DataError, _("Invalid transaction type"));
+        fsm_sendFailure(FailureType_Failure_DataError, _("Invalid transaction type"));
 	return false;
     }
 
@@ -148,8 +148,8 @@ bool tezos_sign_tx(HDNode *node, TezosSignTx *msg, TezosSignedTx *resp)
 
 bool signing_protect_button(bool confirm_only)
 {
-    if (!protectButton(ButtonRequest_ButtonRequestType_ButtonRequest_SignTx, confirm_only)) {
-        fsm_sendFailure(Failure_FailureType_Failure_ActionCancelled, "Signing Canceled");
+    if (!protectButton(ButtonRequestType_ButtonRequest_SignTx, confirm_only)) {
+        fsm_sendFailure(FailureType_Failure_ActionCancelled, "Signing Canceled");
         return false;
     }
     return true;
@@ -159,19 +159,19 @@ const tezos_prefix_info *get_tezos_address_prefix(uint8_t tag)
 {
     if (tag <= 2)
 	return &TEZOS_PREFIX_BYTES[tag];
-    fsm_sendFailure(Failure_FailureType_Failure_DataError, _("Invalid tag"));
+    fsm_sendFailure(FailureType_Failure_DataError, _("Invalid tag"));
     return NULL;
 }
 
-int get_tezos_address_from_contract(TezosSignTx_TezosContractID *contract, char *address)
+int get_tezos_address_from_contract(TezosContractID *contract, char *address)
 {
     switch (contract->tag) {
-        case TezosSignTx_TezosContractID_TezosContractType_Implicit:
+        case TezosContractType_Implicit:
             return get_tezos_address_by_tag(contract->hash.bytes, address);
-        case TezosSignTx_TezosContractID_TezosContractType_Originated:
+        case TezosContractType_Originated:
             return b58cencode(contract->hash.bytes, CONTRACT_HASH_SRC_LEN, &TEZOS_PREFIX_BYTES[3], address, TEZOS_ADDRESS_LEN);
         default:
-            fsm_sendFailure(Failure_FailureType_Failure_DataError, _("Invalid tag in contract id"));
+            fsm_sendFailure(FailureType_Failure_DataError, _("Invalid tag in contract id"));
             return -1;
     }
 }
@@ -184,7 +184,7 @@ int get_tezos_address_by_tag(const uint8_t *implicitaddr, char *address)
 	case 2:
 	    return b58cencode(&implicitaddr[1], CONTRACT_HASH_SRC_LEN, get_tezos_address_prefix(implicitaddr[0]), address, TEZOS_ADDRESS_LEN);
 	default:
-	    fsm_sendFailure(Failure_FailureType_Failure_DataError, _("Invalid tag in public key hash"));
+	    fsm_sendFailure(FailureType_Failure_DataError, _("Invalid tag in public key hash"));
 	    return -1;
     }
 }
@@ -296,7 +296,7 @@ int tezos_encode_data_true_prefix(uint8_t *data, int datalen, uint8_t *out)
     return res + tezos_memcpy(out+res, data, datalen);
 }
 	
-int tezos_encode_contract_id(TezosSignTx_TezosContractID *contract, uint8_t *out)
+int tezos_encode_contract_id(TezosContractID *contract, uint8_t *out)
 {
     int res = tezos_encode_byte(contract->tag, out);
     return res + tezos_memcpy(out+res, contract->hash.bytes, contract->hash.size);

@@ -7,11 +7,11 @@ ELFFILE=build/trezor-emulator64-$TAG
 
 docker build -f Dockerfile.emulator -t $IMAGE .
 docker run -t -v $(pwd)/build:/build:z $IMAGE /bin/sh -c "\
+    export LC_ALL=C.UTF-8 && \
+    export LANG=C.UTF-8 && \
 	cd trezor-mcu && \
 	make -C vendor/nanopb/generator/proto && \
 	make -C firmware/protob && \
-    cat firmware/protob/messages-tezos.pb.c && \
-    cat firmware/protob/messages-nem.pb.c && \
 	EMULATOR=1 make && \
 	EMULATOR=1 make -C emulator && \
 	EMULATOR=1 make -C firmware && \

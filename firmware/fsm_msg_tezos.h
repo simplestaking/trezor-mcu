@@ -8,7 +8,7 @@ void fsm_msgTezosGetAddress(TezosGetAddress *msg)
 
     HDNode *node = fsm_getDerivedNode(ED25519_NAME, msg->address_n, msg->address_n_count, NULL);
     if (!node) {
-        fsm_sendFailure(Failure_FailureType_Failure_ProcessError, _("Failed to derive private key"));
+        fsm_sendFailure(FailureType_Failure_ProcessError, _("Failed to derive private key"));
         return;
     }
 
@@ -41,7 +41,7 @@ void fsm_msgTezosGetPublicKey(TezosGetPublicKey *msg)
 
     HDNode *node = fsm_getDerivedNode(ED25519_NAME, msg->address_n, msg->address_n_count, NULL);
     if (!node) {
-        fsm_sendFailure(Failure_FailureType_Failure_ProcessError, _("Failed to derive private key"));
+        fsm_sendFailure(FailureType_Failure_ProcessError, _("Failed to derive private key"));
         return;
     }
 
@@ -56,8 +56,8 @@ void fsm_msgTezosGetPublicKey(TezosGetPublicKey *msg)
         strlcpy(desc, "Public Key:", sizeof(desc));
         layoutDialogSwipe(&bmp_icon_question, NULL, _("Continue"), NULL,
                           desc, str[0], str[1], str[2], str[3], NULL);
-        if (!protectButton(ButtonRequest_ButtonRequestType_ButtonRequest_PublicKey, true)) {
-            fsm_sendFailure(Failure_FailureType_Failure_ActionCancelled, NULL);
+        if (!protectButton(ButtonRequestType_ButtonRequest_PublicKey, true)) {
+            fsm_sendFailure(FailureType_Failure_ActionCancelled, NULL);
             layoutHome();
             return;
         }
@@ -78,7 +78,7 @@ void fsm_msgTezosSignTx(TezosSignTx *msg)
 
     HDNode *node = fsm_getDerivedNode(ED25519_NAME, msg->address_n, msg->address_n_count, NULL);
     if (!node) {
-        fsm_sendFailure(Failure_FailureType_Failure_ProcessError, _("Failed to derive private key"));
+        fsm_sendFailure(FailureType_Failure_ProcessError, _("Failed to derive private key"));
         return;
     }
 
