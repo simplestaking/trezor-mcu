@@ -202,7 +202,7 @@ int b58cencode(const uint8_t *src, int srclen, const tezos_prefix_info *prefix, 
     memcpy(payload, prefix->prefix, prefix->prefixlen);
     memcpy(payload + prefix->prefixlen, src, srclen);
 
-    if (base58_encode_check(payload, sizeof(payload), HASHER_SHA2, out, outlen) == 0)
+    if (base58_encode_check(payload, sizeof(payload), HASHER_SHA2D, out, outlen) == 0)
         return -1;
 
     return 0;
