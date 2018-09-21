@@ -57,8 +57,6 @@ int hdnode_get_tezos_public_key(HDNode *node, char *public_key, int public_keyle
 
 bool tezos_sign_tx(HDNode *node, TezosSignTx *msg, TezosSignedTx *resp)
 {
-    hdnode_fill_public_key(node); // TODO: REMOVE THIS - temporary for not causing errors
-
     if (msg->has_transaction) {
         char destination[TEZOS_ADDRESS_LEN];
         get_tezos_address_from_contract(&msg->transaction.destination, destination);
@@ -211,7 +209,7 @@ int b58cencode(const uint8_t *src, int srclen, const tezos_prefix_info *prefix, 
 int tezos_get_operation_bytes(TezosSignTx *msg, uint8_t *out)
 {
     int pos = 0;
-    pos += tezos_memcpy(out, msg->branch.bytes, sizeof(msg->branch));
+    pos += tezos_memcpy(out, msg->branch.bytes, msg->branch.size);
 
     if (msg->has_reveal) {
         pos += tezos_encode_byte(7, out+pos);
@@ -321,8 +319,10 @@ int tezos_encode_zarith(uint64_t num, uint8_t *out)
 
 int tezos_encode_byte(uint8_t byte, uint8_t *out)
 {
-    uint8_t arr[] = {byte};
-    return tezos_memcpy(out, arr, 1);
+    //uint8_t arr[] = {byte};
+    //return tezos_memcpy(out, arr, 1);
+    *out = byte;
+    return 1;
 }
 
 int tezos_memcpy(uint8_t *out, uint8_t *payload, int srclen)
