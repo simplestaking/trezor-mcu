@@ -111,7 +111,7 @@ bool tezos_sign_tx(HDNode *node, TezosSignTx *msg, TezosSignedTx *resp)
     uint8_t opbytes[1024];
     int datalen = tezos_get_operation_bytes(msg, opbytes);
 
-    uint8_t wmopbytes[33];
+    uint8_t wmopbytes[1025];
     wmopbytes[0] = 3; /* watermark */
     memcpy(&wmopbytes[1], opbytes, datalen);
 
@@ -218,7 +218,7 @@ int tezos_get_operation_bytes(TezosSignTx *msg, uint8_t *out)
         pos += tezos_encode_zarith(msg->reveal.counter, out+pos);
         pos += tezos_encode_zarith(msg->reveal.gas_limit, out+pos);
         pos += tezos_encode_zarith(msg->reveal.storage_limit, out+pos);
-        pos += tezos_memcpy(out+pos, msg->reveal.public_key.bytes, 33);
+        pos += tezos_memcpy(out+pos, msg->reveal.public_key.bytes, msg->reveal.public_key.size);
     }
 
     if (msg->has_transaction) {
@@ -246,7 +246,8 @@ int tezos_get_operation_bytes(TezosSignTx *msg, uint8_t *out)
         pos += tezos_encode_zarith(msg->origination.gas_limit, out+pos);
         pos += tezos_encode_zarith(msg->origination.storage_limit, out+pos);
         pos += tezos_memcpy(out+pos, msg->origination.manager_pubkey.bytes, msg->origination.manager_pubkey.size);
-        pos += tezos_encode_bool(msg->origination.spendable, out+pos);
+        pos += tezos_encode_zarith(msg->origination.balance, out+pos);
+	pos += tezos_encode_bool(msg->origination.spendable, out+pos);
         pos += tezos_encode_bool(msg->origination.delegatable, out+pos);
         pos += msg->origination.has_delegate ?
 	    tezos_encode_data_true_prefix(
@@ -319,10 +320,8 @@ int tezos_encode_zarith(uint64_t num, uint8_t *out)
 
 int tezos_encode_byte(uint8_t byte, uint8_t *out)
 {
-    //uint8_t arr[] = {byte};
-    //return tezos_memcpy(out, arr, 1);
-    *out = byte;
-    return 1;
+    uint8_t arr[] = {byte};
+    return tezos_memcpy(out, arr, 1);
 }
 
 int tezos_memcpy(uint8_t *out, uint8_t *payload, int srclen)
